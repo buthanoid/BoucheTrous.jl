@@ -1,0 +1,10 @@
+name = "BoucheTrous"
+uuid = "0b13a4d2-f5a1-40de-a234-47f0859940f6"
+authors = ["ferreol <ferreol.soulez@free.fr>"]
+version = "0.1.0"
+
+[deps]
+AbstractFFTs = "621f4979-c628-5d54-868e-fcf4e3e8185c"
+OptimPackNextGen = "080ffe24-4a27-4ab0-ad71-7b624e73ef8d"
+SimpleAlgebra = "c653966b-d9be-4146-a61d-9a13ffa1fe75"
+Zygote = "e88e6eb3-aa80-5325-afca-941959d7151f"
