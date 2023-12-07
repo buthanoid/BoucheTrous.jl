@@ -52,7 +52,7 @@ const BANDS_DICT_IRDIS = Dict{String,Vector{Float64}}(
     "NB_ContK2" => [2.266, 2.266],
     # Spectroscopy
     "S_LR" => [1.644,  1.644], "S_MR" => [1.3845, 1.3845])
-    
+
 
 const IGNORED_PIXELS_IRDIS = begin
     vpm = falses(2048, 1024)
@@ -88,13 +88,13 @@ function BoucheTrous_IRDIS(
 
     hdudata = fitsfile[extdata]
     hduweights = fitsfile[extweights]
-    
+
     diameter = 8.2 # diametre des UT [m]
-    
+
     band = hdudata["ESO INS COMB IFLT"].string
     (λl, λr) = BANDS_DICT_IRDIS[band] .* 1e-6 # [m]
-    
-    
+
+
     pixscal = hdudata["PIXSCAL"].float
 
     pupil_radius_l = compute_pupil_radius(diameter, λl, pixscal)
@@ -102,15 +102,15 @@ function BoucheTrous_IRDIS(
 
     data = read(hdudata)
     badpixels ::BitArray = (read(hduweights) .== 0)
-    
+
     # we do not care about some of the bad pixels
     badpixels[IGNORED_PIXELS_IRDIS,:] .= false
-    
+
     data_l      = view(data, 1:1024,    1:1024, :)
     data_r      = view(data, 1025:2048, 1:1024, :)
     badpixels_l = badpixels[1:1024,    1:1024, :]
     badpixels_r = badpixels[1025:2048, 1:1024, :]
-    
+
     BoucheTrous!(data_l, badpixels_l, pupil_radius_l)
     BoucheTrous!(data_r, badpixels_r, pupil_radius_r)
 
@@ -151,11 +151,11 @@ function modify_one_hdu(
 ) ::Nothing
 
     src_fitsfile.path == dst_filepath && throw(ArgumentError("dst path cannot equal src path"))
-    
+
     hdu_to_modify ::FitsImageHDU = src_fitsfile[ext]
-    
+
     modified = false
-    
+
     FitsFile(dst_filepath, "w!") do dst_fitsfile
         for hdu in src_fitsfile
             if !modified && hdu == hdu_to_modify
@@ -166,7 +166,7 @@ function modify_one_hdu(
             end
         end
     end
-    
+
     nothing
 end
 
